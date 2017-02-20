@@ -89,8 +89,17 @@
     enabled: true
 
 - name: create horizon config directory
-  file: 
+  file:
     dest: "/etc/openstack-dashboard"
-    state: directory 
+    state: directory
     group: "{{ openstack_meta.apache[os].group }}"
     mode: 0750
+
+- name: add inspec apache checks
+  template:
+    src: inspec/apache.rb
+    dest: "{{ apache.inspec.control_path }}"
+    mode: 0644
+  tags:
+    - inspec
+  when: inspec.enabled|default('False')|bool

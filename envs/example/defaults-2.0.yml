@@ -655,6 +655,9 @@ inspec:
   controls:
     rhel7:
       enabled: "{{ ursula_os == 'rhel' }}"
+    mysql:
+      enabled: true
+      profile_name: inspec-mysql
 
 #openstack-ansible-security overrides
 security_enable_chrony: false

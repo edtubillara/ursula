@@ -14,6 +14,13 @@ inspec:
       name: inspec-stig-rhel7
       version: master
       url: https://github.com/inspec-stigs/inspec-stig-rhel7/archive/master.tar.gz
+    ursula-inspec:
+      name: ursula-inspec
+      version: master
+      url: https://github.com/blueboxgroup/ursula-inspec/archive/master.tar.gz
+      sub_profiles:
+        - name: inspec-mysql
+          path: ursula-inspec/mysql
   controls:
     rhel7:
       enabled: false
@@ -23,6 +30,10 @@ inspec:
         RHEL_07_030710_audit_key_name: audit_account_changes-V-38531
         client_alive_interval: '900'
         RHEL_07_030523_audit_key_name: actions-V-38578
+    mysql:
+      enabled: true
+      profile_location: ursula-inspec
+      profile_name: inspec-mysql
     horizon:
       enabled: true
       profile_location: openstack_security

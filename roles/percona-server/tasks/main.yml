@@ -262,3 +262,15 @@
   tags:
     - serverspec
   when: serverspec.enabled|default('False')|bool
+
+- name: inspec checks for mysql
+  template:
+    src: inspec/mysql.rb
+    dest: /etc/inspec/host-controls/controls/mysql.rb
+    owner: root
+    mode: 0644
+  tags:
+    - inspec
+  when:
+    - inspec.enabled|default('False')|bool
+    - inspec.controls.mysql.enabled|default('False')|bool

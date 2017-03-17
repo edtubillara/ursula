@@ -2,6 +2,12 @@
 dependencies:
   - role: openstack-database
     database_name: neutron
+  - role: inspec
+    install_inspec_controls: [neutron-control]
+    tags: inspec
+    when:
+      - inspec.enabled|bool
+      - inspec.controls.neutron-control.enabled|bool
   - role: neutron-common
   - role: sensu-check
   - role: collectd-plugin

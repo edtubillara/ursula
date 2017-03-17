@@ -1,5 +1,13 @@
 ---
 dependencies:
+  - role: inspec
+    install_inspec_controls:
+      - nova-data
+      - kvm
+    tags: inspec
+    when:
+      - inspec.enabled|bool
+      - inspec.controls.nova-data.enabled|bool
   - role: nova-common
   - role: docker
     when: nova.compute_driver == "novadocker.virt.docker.DockerDriver"

@@ -1,5 +1,11 @@
 ---
 dependencies:
+  - role: inspec
+    install_inspec_controls: [nova-control]
+    tags: inspec
+    when:
+      - inspec.enabled|bool
+      - inspec.controls.nova-control.enabled|bool
   - role: nova-common
   - role: openstack-database
     database_name: nova

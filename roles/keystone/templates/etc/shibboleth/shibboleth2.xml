@@ -66,7 +66,7 @@
           {% if keystone.federation.sp.saml.providers[0].verify_idp_cert|default(True)|bool -%}
           <TransportOption provider="CURL" option="64">1</TransportOption>
           <TransportOption provider="CURL" option="81">2</TransportOption>
-          <TransportOption provider="CURL" option="10065">/etc/ssl/certs/ca-certificates.crt</TransportOption>
+          <TransportOption provider="CURL" option="10065">{{ keystone.shibboleth.cafile }}</TransportOption>
           {% endif -%}
         </MetadataProvider>
 {% endif %}

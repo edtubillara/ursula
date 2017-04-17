@@ -86,6 +86,14 @@ keystone:
     sensu_checks:
       check_keystone_api:
         criticality: 'critical'
+  shibboleth:
+    package_name:
+      ubuntu: libapache2-mod-shib2
+      rhel: shibboleth.x86_64
+    user_group:
+      ubuntu: _shibd
+      rhel: shibd
+    cafile: '{{ ssl.cafile }}'
   federation:
     enabled: False
     idp:

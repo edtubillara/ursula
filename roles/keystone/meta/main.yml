@@ -44,3 +44,6 @@ dependencies:
       - { protocol: tcp, port: "{{ endpoints.keystone.port.haproxy_api }}" }
       - { protocol: tcp, port: "{{ endpoints.keystone_admin.port.haproxy_api }}" }
       - { protocol: tcp, port: "{{ endpoints.keystone_legacy.port.haproxy_api }}" }
+  - role: repos
+    repo: opensuse
+    when: ursula_os == 'rhel'

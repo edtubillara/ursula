@@ -1,6 +1,8 @@
 ---
-- name: install libapache2-mod-shib2
-  apt: name=libapache2-mod-shib2 state=present
+- name: install shibboleth
+  package:
+    name: "{{ keystone.shibboleth.package_name[ursula_os] }}"
+    state: present
   register: result
   until: result|succeeded
   retries: 5
@@ -33,23 +35,45 @@
 - name: set shibboleth conf file permissions
   file:
     path: /etc/shibboleth/
-    owner: _shibd
-    group: _shibd
+    owner: "{{ keystone.shibboleth.user_group[ursula_os] }}"
+    group: "{{ keystone.shibboleth.user_group[ursula_os] }}"
     mode: 0640
   notify: restart shibboleth
 
 - name: set shibboleth conf folder permissions
   file:
     path: /etc/shibboleth/
-    owner: _shibd
-    group: _shibd
+    owner: "{{ keystone.shibboleth.user_group[ursula_os] }}"
+    group: "{{ keystone.shibboleth.user_group[ursula_os] }}"
     mode: 0755
     state: directory
   notify: restart shibboleth
 
 - name: add apache user to _shibd group
-  user: name=www-data shell=/bin/bash groups=_shibd append=yes
+  user:
+    name: www-data
+    shell: /bin/bash
+    groups: "{{ keystone.shibboleth.user_group[ursula_os] }}"
+    append: yes
 
 - name: enable apache mod shib2
   apache2_module: name=shib2
   notify: reload apache
+  when: ursula_os == 'ubuntu'
+
+- block:
+  - name: enable httpd mod shib
+    template:
+      src: etc/httpd/conf.modules.d/47-mod_shib.conf
+      dest: /etc/httpd/conf.modules.d/47-mod_shib.conf
+      mode: 0644
+      owner: root
+      group: root
+    notify: reload apache
+    when: keystone.federation.enabled|bool and keystone.federation.sp.saml.enabled|bool
+  - name: make sure default shibd config does not exist
+    file:
+      path: /etc/httpd/conf.d/shib.conf
+      state: absent
+    notify: reload apache
+  when: ursula_os == 'rhel'
